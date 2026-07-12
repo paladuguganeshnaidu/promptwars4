@@ -15,7 +15,7 @@ const envSchema = z.object({
   PORT: z.coerce.number().int().positive().default(DEFAULT_PORT),
   GEMINI_API_KEY: z.string().min(1, 'GEMINI_API_KEY is required'),
   REDIS_URL: z.string().min(1).optional(),
-  GEMINI_MODEL: z.string().min(1).default('gemini-2.5-flash'),
+  GEMINI_MODEL: z.string().min(1).default('gemini-2.0-flash'),
   GOOGLE_CLOUD_PROJECT: z.string().min(1).optional(),
   ALLOWED_ORIGINS: z.string().default(''),
   LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info'),

@@ -42,31 +42,59 @@ export async function ensureSeeded(): Promise<void> {
 
   try {
     const db = getFirestore();
+
+    // Check if zones collection has any documents
+    logger.debug('Checking if Firestore collections are populated...');
     const existing = await db.collection(COLLECTIONS.zones).limit(1).get();
+
     if (!existing.empty) {
+      logger.info('Firestore collections already populated, skipping seed');
       return;
     }
+
+    logger.info('Firestore collections are empty, seeding with baseline data...');
+
+    // Create a batch write to seed all collections atomically
     const batch = db.batch();
+
+    // Seed zones
     for (const zone of BASELINE_ZONES) {
-      batch.set(db.collection(COLLECTIONS.zones).doc(zone.id), zone);
+      const zoneRef = db.collection(COLLECTIONS.zones).doc(zone.id);
+      batch.set(zoneRef, zone);
     }
+    logger.debug(`Prepared ${String(BASELINE_ZONES.length)} zones for seeding`);
+
+    // Seed incidents
     for (const incident of BASELINE_INCIDENTS) {
-      batch.set(db.collection(COLLECTIONS.incidents).doc(incident.id), incident);
+      const incidentRef = db.collection(COLLECTIONS.incidents).doc(incident.id);
+      batch.set(incidentRef, incident);
     }
-    batch.set(
-      db.collection(COLLECTIONS.sustainability).doc(SUSTAINABILITY_DOC_ID),
-      BASELINE_SUSTAINABILITY,
-    );
+    logger.debug(`Prepared ${String(BASELINE_INCIDENTS.length)} incidents for seeding`);
+
+    // Seed sustainability metrics
+    const sustainabilityRef = db
+      .collection(COLLECTIONS.sustainability)
+      .doc(SUSTAINABILITY_DOC_ID);
+    batch.set(sustainabilityRef, BASELINE_SUSTAINABILITY);
+    logger.debug('Prepared sustainability metrics for seeding');
+
+    // Commit all writes at once
     await batch.commit();
-    logger.info('Seeded baseline operations data into Firestore');
+    logger.info('Successfully seeded baseline operations data into Firestore');
   } catch (error: unknown) {
     const errorCode = (error as { code?: string }).code;
     const errorMessage = error instanceof Error ? error.message : String(error);
 
+    logger.error(
+      { errorCode, errorMessage, err: error },
+      'Failed to seed Firestore collections',
+    );
+
     if (errorCode === 'PERMISSION_DENIED' || errorMessage.includes('disabled')) {
       markFirestoreUnavailable(errorMessage);
+      logger.warn('Firestore API unavailable; operations will use mock data');
     } else {
-      logger.error({ err: error }, 'Seeding failed');
+      // Re-throw other errors so they're visible in startup logs
       throw error;
     }
   }
@@ -90,6 +118,13 @@ export async function getSnapshot(): Promise<OpsSnapshot> {
     const zones = parseDocuments(zoneRecordSchema, zonesSnap.docs)
       .map(toZoneOccupancy)
       .sort((a, b) => b.densityPct - a.densityPct);
+
+    // If no zones exist, return mock data (collections not yet seeded)
+    if (zones.length === 0) {
+      logger.debug('Operations collections are empty; returning mock snapshot');
+      return getMockSnapshot();
+    }
+
     const incidents = parseDocuments(incidentSchema, incidentsSnap.docs).sort((a, b) =>
       b.reportedAt.localeCompare(a.reportedAt),
     );
@@ -103,13 +138,17 @@ export async function getSnapshot(): Promise<OpsSnapshot> {
     const errorCode = (error as { code?: string }).code;
     const errorMessage = error instanceof Error ? error.message : String(error);
 
+    logger.warn(
+      { errorCode, errorMessage },
+      'Failed to read operations snapshot; falling back to mock data',
+    );
+
     if (errorCode === 'PERMISSION_DENIED' || errorMessage.includes('disabled')) {
       markFirestoreUnavailable(errorMessage);
-      return getMockSnapshot();
     }
 
-    logger.error({ err: error }, 'Failed to read operations snapshot');
-    throw error;
+    // Always fallback to mock data on read errors
+    return getMockSnapshot();
   }
 }
 
@@ -128,9 +167,13 @@ export async function advanceTelemetry(random: () => number = Math.random): Prom
   try {
     const db = getFirestore();
     const zonesSnap = await db.collection(COLLECTIONS.zones).get();
+
+    // If no zones exist yet (not seeded), skip this tick
     if (zonesSnap.empty) {
+      logger.debug('No zones in Firestore; skipping telemetry tick');
       return;
     }
+
     const batch = db.batch();
     for (const doc of zonesSnap.docs) {
       const zone = zoneRecordSchema.safeParse(doc.data());
@@ -151,11 +194,14 @@ export async function advanceTelemetry(random: () => number = Math.random): Prom
     const errorCode = (error as { code?: string }).code;
     const errorMessage = error instanceof Error ? error.message : String(error);
 
+    logger.warn(
+      { errorCode, errorMessage },
+      'Telemetry tick failed; will retry on next tick',
+    );
+
     if (errorCode === 'PERMISSION_DENIED' || errorMessage.includes('disabled')) {
       markFirestoreUnavailable(errorMessage);
-    } else {
-      logger.error({ err: error }, 'Telemetry tick failed');
-      throw error;
     }
+    // Don't re-throw: telemetry is best-effort and should not crash the server
   }
 }

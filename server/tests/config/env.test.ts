@@ -9,7 +9,7 @@ describe('loadEnv', () => {
     const env = loadEnv(VALID_ENV);
     expect(env.PORT).toBe(8080);
     expect(env.NODE_ENV).toBe('development');
-    expect(env.GEMINI_MODEL).toBe('gemini-2.5-flash');
+    expect(env.GEMINI_MODEL).toBe('gemini-2.0-flash');
     expect(env.TELEMETRY_SIM_ENABLED).toBe(true);
   });
 

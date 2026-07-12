@@ -25,11 +25,14 @@ app.listen(env.PORT, () => {
 
 // Seeding is best-effort at startup: if Firestore is briefly unreachable the
 // assistant keeps working and operations endpoints report their own errors.
+logger.info('Starting seeding of operations data...');
 ensureSeeded()
   .then(() => {
+    logger.info('Operations data seeding completed successfully');
     startTelemetrySimulator();
   })
   .catch((error: unknown) => {
     logger.warn({ err: error }, 'Startup seeding failed; operations data may be unavailable');
+    logger.info('Server will use mock data for operations endpoints');
     startTelemetrySimulator();
   });
