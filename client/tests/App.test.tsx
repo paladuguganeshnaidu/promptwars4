@@ -21,9 +21,7 @@ afterEach(() => {
 describe('App routing', () => {
   it('renders the home page with entry points to both personas', () => {
     renderAt('/');
-    expect(
-      screen.getByRole('heading', { name: /Smart Stadiums & Tournament Operations/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /GenAI Stadium Operations for FIFA 2026/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Open the Fan Assistant' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Open Operations' })).toBeInTheDocument();
   });

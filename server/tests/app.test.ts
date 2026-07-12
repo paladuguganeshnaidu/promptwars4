@@ -3,6 +3,7 @@ import request from 'supertest';
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { FakeFirestore } from './helpers/fake-firestore.js';
+import { assistantLimiter } from '../src/middleware/rate-limit.js';
 
 const generateContentMock = vi.fn();
 const fakeDb = new FakeFirestore();
@@ -29,6 +30,9 @@ beforeAll(async () => {
 
 beforeEach(() => {
   generateContentMock.mockReset();
+  assistantLimiter.resetKey('::ffff:127.0.0.1');
+  assistantLimiter.resetKey('127.0.0.1');
+  assistantLimiter.resetKey('::1');
 });
 
 describe('GET /api/health', () => {
@@ -77,13 +81,34 @@ describe('hardened HTTP headers', () => {
     expect(res.headers['cache-control']).toBe('no-store');
   });
 
+  it('rejects requests from disallowed browser origins', async () => {
+    const res = await request(app)
+      .get('/api/health')
+      .set('Origin', 'https://malicious.example');
+    expect(res.status).toBe(500);
+    expect(res.body).toEqual({ success: false, error: 'Internal Server Error' });
+  });
+
   it('refuses cross-site form-encoded POSTs to the API (CSRF hardening)', async () => {
     const res = await request(app)
       .post('/api/operations/briefing')
       .set('Content-Type', 'application/x-www-form-urlencoded')
       .send('a=1');
     expect(res.status).toBe(415);
-    expect(res.body.error.code).toBe('UNSUPPORTED_MEDIA_TYPE');
+    expect(res.body).toEqual({ success: false, error: 'Internal Server Error' });
+  });
+});
+
+describe('assistant rate limiting', () => {
+  it('returns 429 after the assistant budget is exhausted', async () => {
+    for (let index = 0; index < 100; index += 1) {
+      await request(app).get('/api/assistant/ask');
+    }
+
+    const res = await request(app).get('/api/assistant/ask');
+    expect(res.status).toBe(429);
+    expect(res.headers['retry-after']).toBeDefined();
+    expect(res.body).toEqual({ success: false, error: 'Too many Requests' });
   });
 });
 
@@ -106,7 +131,7 @@ describe('GET /api/stadium/facilities', () => {
   it('rejects an unknown category with 400', async () => {
     const res = await request(app).get('/api/stadium/facilities?category=bogus');
     expect(res.status).toBe(400);
-    expect(res.body.error.code).toBe('BAD_REQUEST');
+    expect(res.body).toEqual({ success: false, error: 'Internal Server Error' });
   });
 });
 
@@ -163,6 +188,6 @@ describe('unknown routes', () => {
   it('returns a 404 with a stable error shape', async () => {
     const res = await request(app).get('/api/does-not-exist');
     expect(res.status).toBe(404);
-    expect(res.body.error.code).toBe('NOT_FOUND');
+    expect(res.body).toEqual({ success: false, error: 'Internal Server Error' });
   });
 });

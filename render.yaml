@@ -1,0 +1,54 @@
+services:
+  - type: web
+    name: fifa-2026-stadium-app
+    runtime: node
+    runtimeVersion: '18'
+    region: oregon
+    plan: free
+
+    # Build configuration
+    buildCommand: npm run build
+    startCommand: npm start
+
+    # Health check for free tier keep-alive
+    healthCheckPath: /health
+    healthCheckInterval: 300
+    healthCheckTimeout: 30
+
+    # Auto-deploy on push to main
+    autoDeploy: true
+    branch: main
+
+    # Environment variables (configure these in Render dashboard)
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: '8080'
+
+      # Gemini API key (required, add via Render dashboard)
+      - key: GEMINI_API_KEY
+        sync: false
+
+      # Firebase service account (required, add via Render dashboard)
+      - key: GOOGLE_APPLICATION_CREDENTIALS_JSON
+        sync: false
+
+      # Redis URL (optional, free tier will use in-memory fallback)
+      - key: REDIS_URL
+        sync: false
+
+    # Ephemeral disk for free tier (no persistent storage)
+    # Static files are served from client/dist which is built during CI/CD
+
+    # Root directory (monorepo root)
+    rootDir: ./
+
+    # Ignore patterns (optional)
+    buildFilter:
+      paths:
+        include:
+          - server/**
+          - client/**
+          - package.json
+          - package-lock.json

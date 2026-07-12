@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { loadEnv } from '../../src/config/env.js';
 
@@ -29,5 +29,24 @@ describe('loadEnv', () => {
 
   it('rejects an unknown LOG_LEVEL', () => {
     expect(() => loadEnv({ ...VALID_ENV, LOG_LEVEL: 'verbose' })).toThrowError(/LOG_LEVEL/);
+  });
+
+  it('fails fast at startup when the required Gemini key is missing', async () => {
+    const previousKey = process.env.GEMINI_API_KEY;
+    delete process.env.GEMINI_API_KEY;
+
+    const exitSpy = vi.spyOn(process, 'exit').mockImplementation(() => {
+      throw new Error('process.exit(1)');
+    });
+    const writeSpy = vi.spyOn(process.stderr, 'write').mockImplementation(() => true);
+
+    vi.resetModules();
+    await expect(import('../../src/env.js')).rejects.toThrow('process.exit(1)');
+
+    exitSpy.mockRestore();
+    writeSpy.mockRestore();
+    if (previousKey !== undefined) {
+      process.env.GEMINI_API_KEY = previousKey;
+    }
   });
 });

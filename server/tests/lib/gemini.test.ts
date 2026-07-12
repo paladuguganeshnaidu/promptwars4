@@ -45,4 +45,11 @@ describe('generateText', () => {
     expect(error).toBeInstanceOf(AppError);
     expect((error as AppError).statusCode).toBe(502);
   });
+
+  it('treats a missing model response text as an upstream failure', async () => {
+    generateContentMock.mockResolvedValue({});
+    const error = await generateText('prompt').catch((caught: unknown) => caught);
+    expect(error).toBeInstanceOf(AppError);
+    expect((error as AppError).statusCode).toBe(502);
+  });
 });

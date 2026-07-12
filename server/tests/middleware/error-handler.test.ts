@@ -22,32 +22,25 @@ const req = { method: 'GET', path: '/test' } as Request;
 const next = vi.fn() as unknown as NextFunction;
 
 describe('errorHandler', () => {
-  it('passes an AppError through with its status, code and message', () => {
+  it('returns the sanitized envelope for an AppError', () => {
     const res = makeRes();
     errorHandler(AppError.badRequest('question: Required'), req, res, next);
     expect(res.statusCode).toBe(400);
-    expect(res.body).toEqual({
-      error: { code: 'BAD_REQUEST', message: 'question: Required' },
-    });
+    expect(res.body).toEqual({ success: false, error: 'Internal Server Error' });
   });
 
   it('wraps an unexpected Error as 500 and hides its message from the client', () => {
     const res = makeRes();
     errorHandler(new Error('db password leaked in trace'), req, res, next);
     expect(res.statusCode).toBe(500);
-    const body = res.body as { error: { code: string; message: string } };
-    expect(body.error.code).toBe('INTERNAL');
-    expect(body.error.message).not.toContain('password');
+    expect(res.body).toEqual({ success: false, error: 'Internal Server Error' });
   });
 
   it('handles a thrown non-Error value without crashing', () => {
     const res = makeRes();
     errorHandler('a raw string was thrown', req, res, next);
     expect(res.statusCode).toBe(500);
-    const body = res.body as { error: { code: string; message: string } };
-    expect(body.error.code).toBe('INTERNAL');
-    // The sanitized message never echoes arbitrary thrown values.
-    expect(body.error.message).not.toContain('raw string');
+    expect(res.body).toEqual({ success: false, error: 'Internal Server Error' });
   });
 });
 

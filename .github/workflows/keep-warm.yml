@@ -1,0 +1,56 @@
+name: Keep Render Instance Warm
+
+on:
+  schedule:
+    # Every 10 minutes during business hours (Mon–Fri, 6 AM–10 PM UTC)
+    - cron: '*/10 6-22 * * 1-5'
+    # Every 15 minutes on weekends (lighter usage expected)
+    - cron: '*/15 * * * 0,6'
+  # Allow manual trigger from GitHub Actions tab
+  workflow_dispatch:
+
+jobs:
+  ping-health:
+    name: Ping Health Endpoint
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Ping Render health endpoint
+        run: |
+          # Replace {service-name} with your actual Render service name
+          # Example: fifa-2026-stadium-app.onrender.com
+          SERVICE_NAME="fifa-2026-stadium-app"
+          HEALTH_URL="https://${SERVICE_NAME}.onrender.com/health"
+
+          echo "Pinging health endpoint: $HEALTH_URL"
+
+          # Retry up to 3 times with 5-second delay between attempts
+          for attempt in 1 2 3; do
+            echo "Attempt $attempt/3..."
+            
+            if curl -f \
+              --connect-timeout 10 \
+              --max-time 30 \
+              --retry 1 \
+              --retry-delay 2 \
+              -s "$HEALTH_URL"; then
+              echo ""
+              echo "✓ Health check successful"
+              exit 0
+            fi
+            
+            if [ $attempt -lt 3 ]; then
+              echo "Retrying in 5 seconds..."
+              sleep 5
+            fi
+          done
+
+          echo "✗ Health check failed after 3 attempts"
+          exit 1
+
+      - name: Notify on failure (optional)
+        if: failure()
+        run: |
+          echo "::warning::Health check failed for FIFA 2026 Stadium App"
+          echo "Check Render dashboard: https://dashboard.render.com"
