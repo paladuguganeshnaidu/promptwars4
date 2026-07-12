@@ -21,26 +21,46 @@ import {
   securityTxtHandler,
 } from './middleware/security.js';
 import { mountClient } from './middleware/static-client.js';
+import { logger } from './lib/logger.js';
 
 const PRODUCTION_ORIGIN = 'https://arenaiq.com';
+const RENDER_ORIGIN = 'https://fifa-2026-stadium-app.onrender.com';
 const LOCAL_ORIGINS = new Set(['http://localhost:5173', 'http://127.0.0.1:5173']);
 
-function isAllowedOrigin(origin: string | undefined): boolean {
+/**
+ * Parses comma-separated allowed origins from environment variable.
+ * Includes production origin, render domain, and local dev origins.
+ */
+function getAllowedOrigins(): Set<string> {
+  const origins = new Set<string>([PRODUCTION_ORIGIN, RENDER_ORIGIN]);
+
+  if (env.NODE_ENV !== 'production') {
+    LOCAL_ORIGINS.forEach((origin) => origins.add(origin));
+  }
+
+  // Parse additional origins from ALLOWED_ORIGINS env var (comma-separated)
+  if (env.ALLOWED_ORIGINS) {
+    const customOrigins = env.ALLOWED_ORIGINS.split(',')
+      .map((origin) => origin.trim())
+      .filter((origin) => origin.length > 0);
+    customOrigins.forEach((origin) => origins.add(origin));
+  }
+
+  return origins;
+}
+
+function isAllowedOrigin(origin: string | undefined, allowedOrigins: Set<string>): boolean {
   if (origin === undefined) {
     return true;
   }
-  if (origin === PRODUCTION_ORIGIN) {
-    return true;
-  }
-  if (env.NODE_ENV !== 'production' && LOCAL_ORIGINS.has(origin)) {
-    return true;
-  }
-  return false;
+  return allowedOrigins.has(origin);
 }
 
 /** Builds the fully-wired Express app (exported for supertest). */
 export function buildApp(): express.Express {
   const app = express();
+  const allowedOrigins = getAllowedOrigins();
+
   app.set('trust proxy', 1);
   app.disable('x-powered-by');
 
@@ -50,12 +70,15 @@ export function buildApp(): express.Express {
   app.use(
     cors({
       origin(origin, callback) {
-        if (isAllowedOrigin(origin)) {
+        if (isAllowedOrigin(origin, allowedOrigins)) {
           callback(null, true);
           return;
         }
-        callback(new Error('Origin not allowed by CORS policy'));
+        const error = new Error('Origin not allowed by CORS policy');
+        logger.debug({ origin }, 'CORS origin rejected');
+        callback(error);
       },
+      credentials: true,
     }),
   );
   app.use(compression());
