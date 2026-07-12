@@ -263,7 +263,7 @@ git push origin main
 | `REDIS_URL`             | (leave empty)      | Redis connection (not needed) | None               | ✅ Yes    |
 | `LOG_LEVEL`             | `info`             | Logging verbosity             | `info`             | ❌ No     |
 | `TELEMETRY_SIM_ENABLED` | `true`             | Crowd simulator               | `true`             | ❌ No     |
-| `GEMINI_MODEL`          | `gemini-2.5-flash` | Gemini model version          | `gemini-2.5-flash` | ❌ No     |
+| `GEMINI_MODEL`          | `gemini-2.0-flash` | Gemini model version          | `gemini-2.0-flash` | ❌ No     |
 
 ---
 

@@ -108,7 +108,7 @@ After creating the web service (or before hitting "Create"), add these environme
 - **`REDIS_URL`**: Leave empty (uses in-memory cache fallback; Redis is not needed on free tier)
 - **`LOG_LEVEL`**: `info` (or `debug` for verbose logs during troubleshooting)
 - **`TELEMETRY_SIM_ENABLED`**: `true` (simulates crowd telemetry for demo purposes)
-- **`GEMINI_MODEL`**: `gemini-2.5-flash` (default; change only if needed)
+- **`GEMINI_MODEL`**: `gemini-2.0-flash` (default; change only if needed)
 
 ---
 
