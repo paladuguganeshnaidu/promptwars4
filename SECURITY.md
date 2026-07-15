@@ -58,9 +58,9 @@ exposed to clients.
 
 ## Reporting a vulnerability
 
-Open a GitHub issue titled `[security]` (no exploit details), or email
-usy.joseph@gmail.com. You will get a response within 48 hours. The same contact
-is published for machine discovery at
+Open a GitHub issue titled `[security]` (no exploit details), or contact the
+maintainer, Paadugu Ganesh Naidu. You will get a response within 48 hours.
+The same contact is published for machine discovery at
 [`/.well-known/security.txt`](https://arenaiq.com/.well-known/security.txt)
 (RFC 9116).
 
