@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { EmergencyAssistModal } from './EmergencyAssistModal.js';
+import { EmergencyAssistModal } from './emergencyAssistModal.js';
 
 const SOS_COUNTDOWN_SECONDS = 10;
 

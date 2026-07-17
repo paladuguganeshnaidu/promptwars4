@@ -1,7 +1,7 @@
 import { NavLink, Outlet } from 'react-router-dom';
 
-import { EmergencyAssistButton } from './EmergencyAssistButton.js';
-import { ThemeToggle } from './ThemeToggle.js';
+import { EmergencyAssistButton } from './emergencyAssistButton.js';
+import { ThemeToggle } from './themeToggle.js';
 
 /** Navigation entries for the two personas. */
 const NAV_ITEMS = [

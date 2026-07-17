@@ -1,10 +1,10 @@
 // Operations Command Center page: live crowd density, incidents,
 // sustainability metrics and an on-demand AI briefing.
 import { ErrorMessage, LoadingState } from '../../components/statusMessage.js';
-import { BriefingPanel } from './BriefingPanel.js';
-import { DensityBoard } from './DensityBoard.js';
-import { IncidentList } from './IncidentList.js';
-import { SustainabilityMeters } from './SustainabilityMeters.js';
+import { BriefingPanel } from './briefingPanel.js';
+import { DensityBoard } from './densityBoard.js';
+import { IncidentList } from './incidentList.js';
+import { SustainabilityMeters } from './sustainabilityMeters.js';
 import { useOperations } from './useOperations.js';
 import { AnimatedWrapper } from '../../components/animatedWrapper.js';
 

@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import { ErrorMessage, LoadingState } from '../../components/statusMessage.js';
 import { MAX_QUESTION_LENGTH } from '../../lib/constants.js';
-import { ChatMessageList } from './ChatMessageList.js';
+import { ChatMessageList } from './chatMessageList.js';
 import { LanguageSelector } from './LanguageSelector.js';
 import { QuickActions } from './QuickActions.js';
 import { useAssistant } from './useAssistant.js';
