@@ -8,7 +8,7 @@ import type {
   OpsBriefing,
   OpsSnapshot,
   SupportedLanguage,
-} from './api-types.js';
+} from './apiTypes.js';
 
 /** Error thrown for any non-2xx API response, carrying a display message. */
 export class ApiError extends Error {
