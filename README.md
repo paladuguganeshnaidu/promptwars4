@@ -1,150 +1,127 @@
-﻿# ArenaIQ - GenAI Stadium Operations for FIFA 2026
+# ArenaIQ — GenAI Stadium Operations (FIFA 2026)
 
-[![CI](https://github.com/my-org/arenaiq/actions/workflows/ci.yml/badge.svg)](https://github.com/my-org/arenaiq/actions/workflows/ci.yml)
-[![CodeQL](https://github.com/my-org/arenaiq/actions/workflows/codeql.yml/badge.svg)](https://github.com/my-org/arenaiq/actions/workflows/codeql.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Node](https://img.shields.io/badge/node-%3E%3D22-brightgreen.svg)](package.json)
+[Live demo](https://cloudcostaii.onrender.com) · [Repository](https://github.com/paladuguganeshnaidu/promptwars4)
 
-ArenaIQ is a monorepo for a stadium operations and fan experience platform built for the FIFA World Cup 2026. It combines a multilingual fan assistant with an operations dashboard so venue staff can monitor crowd conditions, incidents, and sustainability metrics while fans receive grounded, accessible guidance.
+Compact, practical README aligned with the repository code (monorepo: `client` + `server`). Focus: developer setup, common workflows, and where to look in the code.
 
-**Live demo:** <https://arenaiq.com>
-**Repository:** <https://github.com/my-org/arenaiq>
-**Region:** asia-south1 · **GCP project:** project-da29f6cf-ccbd-43b6-8b3
+## Quick summary
 
----
+- Purpose: a bilingual/multilingual fan assistant and operations dashboard for stadium staff.
+- Tech: TypeScript, React (Vite) frontend and Node/Express backend. AI: Gemini integration in server.
+- Monorepo layout:
+  - `client/` — React + Vite app (TypeScript, Ant Design, Vitest)
+  - `server/` — Express API (TypeScript, Firestore, Gemini SDK)
+  - `scripts/`, `e2e/`, `docs/`
 
-## What the project does
+## Live / Source
 
-ArenaIQ supports two main experiences:
-
-- **Fan assistant**: a multilingual assistant that answers venue questions about navigation, accessibility, transport, and facilities.
-- **Operations dashboard**: a live operational view for crowd density, incidents, and sustainability data with AI-generated briefing support.
-
-The assistant is grounded in a curated venue dataset so it can provide structured, venue-specific answers instead of relying on unverified model knowledge.
-
----
-
-## Core features
-
-- Multilingual responses for fan questions
-- Grounded venue guidance for gates, sections, facilities, and transport
-- Accessibility-aware routing and user experience
-- Live operational snapshots for zones, incidents, and sustainability metrics
-- AI-generated operational briefing from the current snapshot
-- Security hardening through validation, rate limiting, and sanitized error handling
-
----
-
-## Architecture overview
-
-This repository is organized as an npm workspace monorepo with two main parts:
-
-- **Client**: React, TypeScript, and Vite for the web experience
-- **Server**: Express and TypeScript for the assistant, operations routes, and backend integrations
-
-### Project structure
-
-```text
-client/         Web app (React + Vite)
-server/         API and backend services
-scripts/        Maintenance and preflight helpers
-docs/           Architecture and design notes
-e2e/            End-to-end test suite
-```
-
-### Main integrations
-
-- **Gemini** for grounded assistant responses and briefing generation
-- **Firestore** for live operational state
-- **Google Secret Manager** for secure deployment secrets
-- **Cloud Run** for hosting the service
-
----
+- Live demo: https://cloudcostaii.onrender.com
+- Source: https://github.com/paladuguganeshnaidu/promptwars4
 
 ## Prerequisites
 
-- Node.js 22 or newer
+- Node.js >= 22 (root `package.json` shows workspace engines; client/server require Node 22+)
 - npm
-- A Gemini API key
-- Optional: Google Cloud project and Firestore access for full deployment
+- Optional: Google Cloud credentials (Firestore) and Gemini API key for full runtime behavior
 
----
+## Quickstart (local development)
 
-## Environment setup
-
-1. Copy the example environment file:
-
-   ```bash
-   cp .env.example .env
-   ```
-
-2. Update the values in `.env` with your local configuration. The most important variables are:
-
-   - `GEMINI_API_KEY`: your Gemini API key
-   - `GEMINI_MODEL`: model name to use
-   - `PORT`: server port (defaults to 8080)
-   - `ALLOWED_ORIGINS`: allowed client origins for local development
-   - `GOOGLE_CLOUD_PROJECT`: your Google Cloud project id if using Firestore
-   - `TELEMETRY_SIM_ENABLED`: enable or disable the telemetry simulator
-
----
-
-## Running locally
-
-Install dependencies:
+1. Install dependencies:
 
 ```bash
 npm install
 ```
 
-Start the backend and frontend in separate terminals:
+2. Copy environment example and edit `.env` values (Gemini key, ports, Firestore project):
+
+```bash
+cp .env.example .env
+# edit values in .env
+```
+
+3. Start backend and frontend in separate terminals:
 
 ```bash
 npm run dev -w @arenaiq/server
-```
-
-```bash
 npm run dev -w @arenaiq/client
 ```
 
-The server typically runs on port 8080 and the client on port 5173.
+Frontend typically runs on port 5173; backend on 8080 (see `.env`).
 
----
+## Build (production)
 
-## Scripts
-
-Useful project scripts include:
+From the repo root:
 
 ```bash
 npm run build
-npm run type-check
-npm run test
-npm run test:coverage
 ```
 
-The repository also includes Playwright coverage for browser and accessibility testing under [e2e](e2e) and supporting architecture notes in [docs](docs).
+This runs the `client` build (TypeScript build + Vite build) and `server` TypeScript compilation.
 
----
+## Tests and quality
 
-## Testing and quality
+- Run unit tests for both packages:
 
-The project includes automated testing and quality checks for the client and server workspaces, covering:
+```bash
+npm test
+```
 
-- unit and integration testing
-- accessibility-focused UI checks
-- end-to-end browser testing
-- static analysis and linting
+- Client tests use `vitest`.
+- Server tests use `vitest` and include some integration-style checks (mocking Firestore/Gemini in tests).
+- Linting and formatting: `eslint`, `prettier`, and `husky` pre-commit hooks are configured at the repo root.
 
----
+## Important scripts (root)
 
-## Security and deployment notes
+- `npm run build` — Build client and server
+- `npm run start` — Start server package (workspace start)
+- `npm run test` — Run tests for both packages
+- `npm run type-check` — Run TypeScript checks across workspaces
 
-ArenaIQ uses server-side validation, rate limiting, and sanitized error responses to reduce abuse and prevent sensitive internals from leaking to clients. For deployment details, see [SECURITY.md](SECURITY.md) and [docs](docs).
+## Where to look in code (quick pointers)
 
----
+- Client:
+  - `client/src/App.tsx` — top-level route wiring
+  - `client/src/features/assistant/` — assistant UI components (assistant page, chat list, language selector)
+  - `client/src/features/operations/` — operations dashboard components (briefing, incident list, density board)
+  - `client/src/lib/api.ts` — typed fetch wrapper used across client features
+
+- Server:
+  - `server/src/index.ts` — app bootstrap
+  - `server/src/features/assistant/` — assistant routes and service (calls Gemini)
+  - `server/src/lib/gemini.ts` — Gemini integration and retries
+  - `server/src/lib/firestore.ts` — Firestore helpers / mocks
+
+## Environment variables (important)
+
+Put these in `.env` (see `.env.example`):
+
+- `GEMINI_API_KEY` — required for Gemini calls
+- `GEMINI_MODEL` — model identifier
+- `PORT` — server port (default 8080)
+- `ALLOWED_ORIGINS` — CORS origins for local dev
+- `GOOGLE_CLOUD_PROJECT` — Firestore project id (if using Firestore)
+
+## Notes on recent repository maintenance
+
+- Filenames in `client/src` use lower-camel file names for imports (e.g. `assistantPage.tsx`, `chatMessageList.tsx`, `appLayout.tsx`) to avoid case-sensitivity issues on Windows and with TypeScript.
+- The project uses workspace-level `husky` + `lint-staged` to enforce linting and formatting.
+
+## CI / Deployment
+
+- CI is configured via GitHub Actions (badges in original README). The repo previously built and tested in CI.
+- For production, build the client assets and deploy the server (Cloud Run / container) with environment variables and Secret Manager for secrets.
+
+## Contributing
+
+- Fork → branch → open PR. Keep changes focused and include tests.
+- Run `npm run test` and `npm run lint` before opening PRs.
 
 ## License
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for the full text.
+- MIT — see `LICENSE`.
 
-Built by Paadugu Ganesh Naidu for Hack2skill PromptWars Virtual — Week 4.
+---
+If you'd like, I can:
+
+- push this updated README to the repository, or
+- expand any section with commands, examples, or a short developer walkthrough (start/stop, debugging tips, dev container suggestions).
