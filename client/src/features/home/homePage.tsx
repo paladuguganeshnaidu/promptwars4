@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { AnimatedWrapper } from '../../components/AnimatedWrapper.js';
+import { AnimatedWrapper } from '../../components/animatedWrapper.js';
 
 /** Home route introducing ArenaIQ and linking to both experiences. */
 export function HomePage(): React.JSX.Element {

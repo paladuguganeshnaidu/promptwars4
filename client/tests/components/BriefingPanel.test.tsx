@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import { BriefingPanel } from '../../src/features/operations/BriefingPanel.js';
+import { BriefingPanel } from '../../src/features/operations/briefingPanel.js';
 
 describe('BriefingPanel', () => {
   it('shows a loading state while the briefing is being generated', () => {

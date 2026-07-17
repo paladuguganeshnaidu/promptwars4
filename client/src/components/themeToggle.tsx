@@ -1,4 +1,4 @@
-import { useTheme, type ThemeMode } from '../contexts/ThemeContext.js';
+import { useTheme, type ThemeMode } from '../contexts/themeContext.js';
 
 const THEME_OPTIONS: { value: ThemeMode; label: string }[] = [
   { value: 'light', label: 'Light' },

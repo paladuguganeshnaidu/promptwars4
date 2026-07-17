@@ -15,7 +15,7 @@ vi.mock('framer-motion', async () => {
   };
 });
 
-import { AnimatedWrapper } from '../../src/components/AnimatedWrapper.js';
+import { AnimatedWrapper } from '../../src/components/animatedWrapper.js';
 
 afterEach(() => {
   vi.restoreAllMocks();

@@ -1,7 +1,7 @@
 // AI briefing panel: a button that turns the live snapshot into prioritized
 // operational recommendations, with accessible loading and error states.
-import { ErrorMessage, LoadingState } from '../../components/StatusMessage.js';
-import type { OpsBriefing } from '../../lib/api-types.js';
+import { ErrorMessage, LoadingState } from '../../components/statusMessage.js';
+import type { OpsBriefing } from '../../lib/apiTypes.js';
 
 interface BriefingPanelProps {
   briefing: OpsBriefing | null;

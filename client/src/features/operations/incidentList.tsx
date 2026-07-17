@@ -1,6 +1,6 @@
 // Open and recent incidents. Severity is conveyed with a coloured dot plus
 // text, and each incident states its zone and status.
-import type { Incident } from '../../lib/api-types.js';
+import type { Incident } from '../../lib/apiTypes.js';
 
 interface IncidentListProps {
   incidents: Incident[];

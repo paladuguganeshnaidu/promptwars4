@@ -1,6 +1,6 @@
 // Live crowd-density board. Each zone shows occupancy, a labelled progress
 // meter and a colour-plus-text status so it is not colour-only.
-import type { ZoneOccupancy, ZoneStatus } from '../../lib/api-types.js';
+import type { ZoneOccupancy, ZoneStatus } from '../../lib/apiTypes.js';
 
 interface DensityBoardProps {
   zones: ZoneOccupancy[];

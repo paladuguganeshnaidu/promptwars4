@@ -4,21 +4,21 @@ import { lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { ConfigProvider } from 'antd';
 
-import { AppLayout } from './components/AppLayout.js';
-import { ErrorBoundary } from './components/ErrorBoundary.js';
-import { NotFoundPage } from './components/NotFoundPage.js';
-import { LoadingState } from './components/StatusMessage.js';
-import { HomePage } from './features/home/HomePage.js';
-import { ThemeProvider, useTheme } from './contexts/ThemeContext.js';
+import { AppLayout } from './components/appLayout.js';
+import { ErrorBoundary } from './components/errorBoundary.js';
+import { NotFoundPage } from './components/notFoundPage.js';
+import { LoadingState } from './components/statusMessage.js';
+import { HomePage } from './features/home/homePage.js';
+import { ThemeProvider, useTheme } from './contexts/themeContext.js';
 import { getAntdTheme } from './theme.js';
 
 const AssistantPage = lazy(() =>
-  import('./features/assistant/AssistantPage.js').then((module) => ({
+  import('./features/assistant/assistantPage.js').then((module) => ({
     default: module.AssistantPage,
   })),
 );
 const OperationsPage = lazy(() =>
-  import('./features/operations/OperationsPage.js').then((module) => ({
+  import('./features/operations/operationsPage.js').then((module) => ({
     default: module.OperationsPage,
   })),
 );

@@ -2,13 +2,13 @@
 // covering navigation, accessibility, transport and venue facilities.
 import { useState } from 'react';
 
-import { ErrorMessage, LoadingState } from '../../components/StatusMessage.js';
+import { ErrorMessage, LoadingState } from '../../components/statusMessage.js';
 import { MAX_QUESTION_LENGTH } from '../../lib/constants.js';
 import { ChatMessageList } from './ChatMessageList.js';
 import { LanguageSelector } from './LanguageSelector.js';
 import { QuickActions } from './QuickActions.js';
 import { useAssistant } from './useAssistant.js';
-import { AnimatedWrapper } from '../../components/AnimatedWrapper.js';
+import { AnimatedWrapper } from '../../components/animatedWrapper.js';
 
 /** Full fan assistant route. */
 export function AssistantPage(): React.JSX.Element {

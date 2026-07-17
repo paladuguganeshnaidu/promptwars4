@@ -1,6 +1,6 @@
 // Sustainability metrics for the current event day, shown as labelled stat
 // tiles.
-import type { SustainabilityMetrics } from '../../lib/api-types.js';
+import type { SustainabilityMetrics } from '../../lib/apiTypes.js';
 
 interface SustainabilityMetersProps {
   metrics: SustainabilityMetrics;

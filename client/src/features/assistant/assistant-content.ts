@@ -1,6 +1,6 @@
 // Static UI content for the fan assistant: supported languages and the
 // quick-action prompts shown as chips.
-import type { SupportedLanguage } from '../../lib/api-types.js';
+import type { SupportedLanguage } from '../../lib/apiTypes.js';
 
 /** A language option offered in the assistant's language selector. */
 export interface LanguageOption {

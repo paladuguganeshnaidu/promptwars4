@@ -4,7 +4,7 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { fetchSnapshot, requestBriefing, toErrorMessage } from '../../lib/api.js';
-import type { OpsBriefing, OpsSnapshot } from '../../lib/api-types.js';
+import type { OpsBriefing, OpsSnapshot } from '../../lib/apiTypes.js';
 
 /** How often the dashboard re-fetches the live snapshot, in milliseconds. */
 const SNAPSHOT_REFRESH_MS = 30_000;

@@ -3,7 +3,7 @@
 import { useCallback, useState } from 'react';
 
 import { askAssistant, toErrorMessage } from '../../lib/api.js';
-import type { SupportedLanguage } from '../../lib/api-types.js';
+import type { SupportedLanguage } from '../../lib/apiTypes.js';
 
 /** A single turn in the assistant conversation. */
 export interface ChatTurn {

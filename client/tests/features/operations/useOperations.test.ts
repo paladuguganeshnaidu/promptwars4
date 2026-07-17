@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import * as api from '../../../src/lib/api.js';
 import { useOperations } from '../../../src/features/operations/useOperations.js';
-import type { OpsSnapshot } from '../../../src/lib/api-types.js';
+import type { OpsSnapshot } from '../../../src/lib/apiTypes.js';
 
 const SNAPSHOT: OpsSnapshot = {
   zones: [],

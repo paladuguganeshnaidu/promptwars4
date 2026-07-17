@@ -1,7 +1,7 @@
 import { act, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { ChatMessageList } from '../../../src/features/assistant/ChatMessageList.js';
+import { ChatMessageList } from '../../../src/features/assistant/chatMessageList.js';
 
 afterEach(() => {
   vi.useRealTimers();

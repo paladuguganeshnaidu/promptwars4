@@ -37,7 +37,7 @@ export default defineConfig({
       include: ['src/**/*.{ts,tsx}'],
       // main.tsx is the DOM bootstrap; api-types.ts holds only type
       // declarations (no executable code to cover).
-      exclude: ['src/main.tsx', 'src/lib/api-types.ts', 'src/vite-env.d.ts'],
+      exclude: ['src/main.tsx', 'src/lib/apiTypes', 'src/vite-env.d.ts'],
       thresholds: {
         lines: 95,
         functions: 95,

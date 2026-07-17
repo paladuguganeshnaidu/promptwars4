@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import { IncidentList } from '../../../src/features/operations/IncidentList.js';
-import type { Incident } from '../../../src/lib/api-types.js';
+import { IncidentList } from '../../../src/features/operations/incidentList.js';
+import type { Incident } from '../../../src/lib/apiTypes.js';
 
 const INCIDENT: Incident = {
   id: 'inc-1',

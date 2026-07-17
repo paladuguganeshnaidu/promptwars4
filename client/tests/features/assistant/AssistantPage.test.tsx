@@ -2,7 +2,7 @@ import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { AssistantPage } from '../../../src/features/assistant/AssistantPage.js';
+import { AssistantPage } from '../../../src/features/assistant/assistantPage.js';
 import * as api from '../../../src/lib/api.js';
 
 afterEach(() => {

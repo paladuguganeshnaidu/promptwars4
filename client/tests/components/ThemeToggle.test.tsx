@@ -2,8 +2,8 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { ThemeToggle } from '../../src/components/ThemeToggle.js';
-import { ThemeProvider } from '../../src/contexts/ThemeContext.js';
+import { ThemeToggle } from '../../src/components/themeToggle.js';
+import { ThemeProvider } from '../../src/contexts/themeContext.js';
 
 function createMatchMedia(matches: boolean): MediaQueryList {
   return {
