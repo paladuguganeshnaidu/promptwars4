@@ -21,7 +21,7 @@ export class ApiError extends Error {
   }
 }
 
-const GENERIC_ERROR = 'The service is temporarily unavailable. Please try again.';
+const GENERIC_ERROR = 'Monthly Ai Credits Runned out';
 
 /**
  * Extracts a user-safe message from a caught error: the sanitized message of

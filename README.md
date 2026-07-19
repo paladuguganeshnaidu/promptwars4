@@ -1,127 +1,99 @@
-# ArenaIQ — GenAI Stadium Operations (FIFA 2026)
+# FIFA 2026 Stadium App (ArenaIQ)
 
-[Live demo](https://cloudcostaii.onrender.com) · [Repository](https://github.com/paladuguganeshnaidu/promptwars4)
+[Live Demo](https://fifa-2026-stadium-app.onrender.com) · [Repository](https://github.com/paladuguganeshnaidu/promptwars4)
 
-Compact, practical README aligned with the repository code (monorepo: `client` + `server`). Focus: developer setup, common workflows, and where to look in the code.
+ArenaIQ is a bilingual/multilingual fan assistant and operations dashboard designed specifically for stadium staff during the FIFA 2026 World Cup. It streamlines stadium operations, helps manage incidents, and provides real-time assistance to fans in multiple languages using GenAI (Gemini).
 
-## Quick summary
+## What is the use of this project?
 
-- Purpose: a bilingual/multilingual fan assistant and operations dashboard for stadium staff.
-- Tech: TypeScript, React (Vite) frontend and Node/Express backend. AI: Gemini integration in server.
-- Monorepo layout:
-  - `client/` — React + Vite app (TypeScript, Ant Design, Vitest)
-  - `server/` — Express API (TypeScript, Firestore, Gemini SDK)
-  - `scripts/`, `e2e/`, `docs/`
+This application serves two main purposes:
 
-## Live / Source
+1. **Fan Assistance**: A GenAI-powered assistant (using Gemini) that helps fans with their queries, navigation, and general information in their native languages.
+2. **Operations Dashboard**: A central hub for stadium staff to view real-time data, manage incidents, monitor crowd density, and oversee overall stadium operations during the event.
 
-- Live demo: https://cloudcostaii.onrender.com
-- Source: https://github.com/paladuguganeshnaidu/promptwars4
+## Tech Stack
 
-## Prerequisites
+The project is structured as a monorepo containing both the frontend client and the backend server:
 
-- Node.js >= 22 (root `package.json` shows workspace engines; client/server require Node 22+)
+- **Frontend (`client/`)**: React, TypeScript, Vite, Ant Design, Vitest.
+- **Backend (`server/`)**: Node.js, Express, TypeScript, Firestore, Google Gemini SDK.
+
+## Live Link
+
+Check out the live application here: **[https://fifa-2026-stadium-app.onrender.com](https://fifa-2026-stadium-app.onrender.com)**
+
+## Quickstart (Local Development)
+
+### Prerequisites
+
+- Node.js >= 18 (Client and Server run optimally on Node 22+)
 - npm
-- Optional: Google Cloud credentials (Firestore) and Gemini API key for full runtime behavior
+- Google Cloud credentials (Firestore) and a Gemini API key for AI features.
 
-## Quickstart (local development)
+### Installation & Setup
 
-1. Install dependencies:
+1. **Install dependencies**:
 
-```bash
-npm install
-```
+   ```bash
+   npm install
+   ```
 
-2. Copy environment example and edit `.env` values (Gemini key, ports, Firestore project):
+2. **Environment Variables**:
+   Copy the `.env.example` file to `.env` and fill in your values (like the Gemini API key, Firestore project ID, and ports).
 
-```bash
-cp .env.example .env
-# edit values in .env
-```
+   ```bash
+   cp .env.example .env
+   ```
 
-3. Start backend and frontend in separate terminals:
+3. **Run the Development Servers**:
+   Start both the backend and frontend in separate terminals:
 
-```bash
-npm run dev -w @arenaiq/server
-npm run dev -w @arenaiq/client
-```
+   ```bash
+   # Start the backend server (typically runs on port 8080)
+   npm run dev -w @arenaiq/server
 
-Frontend typically runs on port 5173; backend on 8080 (see `.env`).
+   # Start the frontend client (typically runs on port 5173)
+   npm run dev -w @arenaiq/client
+   ```
 
-## Build (production)
+## Build for Production
 
-From the repo root:
+To build both the client and server for production, run this from the repository root:
 
 ```bash
 npm run build
 ```
 
-This runs the `client` build (TypeScript build + Vite build) and `server` TypeScript compilation.
+## Testing & Quality
 
-## Tests and quality
+- **Run all unit tests**:
+  ```bash
+  npm test
+  ```
+- Both client and server use `vitest` for testing. Server tests include integration-style checks with mocked Firestore/Gemini.
+- Linting and formatting are enforced via `eslint`, `prettier`, and `husky` pre-commit hooks.
 
-- Run unit tests for both packages:
+## Key Scripts
 
-```bash
-npm test
-```
+- `npm run build` — Build both client and server packages.
+- `npm run start` — Start the backend server.
+- `npm run test` — Run tests across both workspaces.
+- `npm run type-check` — Run TypeScript type checking.
 
-- Client tests use `vitest`.
-- Server tests use `vitest` and include some integration-style checks (mocking Firestore/Gemini in tests).
-- Linting and formatting: `eslint`, `prettier`, and `husky` pre-commit hooks are configured at the repo root.
+## Codebase Overview
 
-## Important scripts (root)
+- **Client (`client/`)**:
+  - `src/App.tsx` — Top-level routing.
+  - `src/features/assistant/` — Fan assistant UI components.
+  - `src/features/operations/` — Operations dashboard components (incidents, density board).
+  - `src/lib/api.ts` — Typed fetch wrapper for communicating with the server.
 
-- `npm run build` — Build client and server
-- `npm run start` — Start server package (workspace start)
-- `npm run test` — Run tests for both packages
-- `npm run type-check` — Run TypeScript checks across workspaces
-
-## Where to look in code (quick pointers)
-
-- Client:
-  - `client/src/App.tsx` — top-level route wiring
-  - `client/src/features/assistant/` — assistant UI components (assistant page, chat list, language selector)
-  - `client/src/features/operations/` — operations dashboard components (briefing, incident list, density board)
-  - `client/src/lib/api.ts` — typed fetch wrapper used across client features
-
-- Server:
-  - `server/src/index.ts` — app bootstrap
-  - `server/src/features/assistant/` — assistant routes and service (calls Gemini)
-  - `server/src/lib/gemini.ts` — Gemini integration and retries
-  - `server/src/lib/firestore.ts` — Firestore helpers / mocks
-
-## Environment variables (important)
-
-Put these in `.env` (see `.env.example`):
-
-- `GEMINI_API_KEY` — required for Gemini calls
-- `GEMINI_MODEL` — model identifier
-- `PORT` — server port (default 8080)
-- `ALLOWED_ORIGINS` — CORS origins for local dev
-- `GOOGLE_CLOUD_PROJECT` — Firestore project id (if using Firestore)
-
-## Notes on recent repository maintenance
-
-- Filenames in `client/src` use lower-camel file names for imports (e.g. `assistantPage.tsx`, `chatMessageList.tsx`, `appLayout.tsx`) to avoid case-sensitivity issues on Windows and with TypeScript.
-- The project uses workspace-level `husky` + `lint-staged` to enforce linting and formatting.
-
-## CI / Deployment
-
-- CI is configured via GitHub Actions (badges in original README). The repo previously built and tested in CI.
-- For production, build the client assets and deploy the server (Cloud Run / container) with environment variables and Secret Manager for secrets.
-
-## Contributing
-
-- Fork → branch → open PR. Keep changes focused and include tests.
-- Run `npm run test` and `npm run lint` before opening PRs.
+- **Server (`server/`)**:
+  - `src/index.ts` — Application bootstrap and express setup.
+  - `src/features/assistant/` — Assistant routes and Gemini service integration.
+  - `src/lib/gemini.ts` — Gemini SDK integration and retry logic.
+  - `src/lib/firestore.ts` — Database helpers.
 
 ## License
 
-- MIT — see `LICENSE`.
-
----
-If you'd like, I can:
-
-- push this updated README to the repository, or
-- expand any section with commands, examples, or a short developer walkthrough (start/stop, debugging tips, dev container suggestions).
+This project is licensed under the MIT License. See the `LICENSE` file for details.
