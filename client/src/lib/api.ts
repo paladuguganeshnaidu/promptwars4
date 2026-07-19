@@ -21,7 +21,7 @@ export class ApiError extends Error {
   }
 }
 
-const GENERIC_ERROR = 'Monthly Ai Credits Runned out';
+const GENERIC_ERROR = 'No Monthly AI Credits Remaining';
 
 /**
  * Extracts a user-safe message from a caught error: the sanitized message of

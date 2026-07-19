@@ -27,9 +27,9 @@ describe('AppError', () => {
   });
 
   it('upstreamFailure is a 502 with an upper-cased dependency code', () => {
-    const error = AppError.upstreamFailure('gemini', 'timeout');
+    const error = AppError.upstreamFailure('ai', 'timeout');
     expect(error.statusCode).toBe(502);
-    expect(error.code).toBe('GEMINI_UNAVAILABLE');
+    expect(error.code).toBe('AI_UNAVAILABLE');
     expect(error.message).toBe('timeout');
   });
 });

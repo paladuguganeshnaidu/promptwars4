@@ -1,7 +1,7 @@
 // AI operations briefing: turns the live snapshot into prioritized,
 // actionable recommendations for the venue operations team.
 import { BRIEFING_CACHE_TTL_MS, CACHE_MAX_ENTRIES } from '../../config/constants.js';
-import { generateText } from '../../lib/gemini.js';
+import { generateText } from '../../lib/ai.js';
 import { TtlCache } from '../../lib/ttl-cache.js';
 import { getSnapshot } from './service.js';
 import type { OpsBriefing, OpsSnapshot } from './types.js';

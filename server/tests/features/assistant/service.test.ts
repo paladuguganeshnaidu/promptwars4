@@ -4,7 +4,7 @@ import { AppError } from '../../../src/lib/app-error.js';
 
 const generateTextMock = vi.fn();
 
-vi.mock('../../../src/lib/gemini.js', () => ({
+vi.mock('../../../src/lib/ai.js', () => ({
   generateText: generateTextMock,
 }));
 

@@ -5,7 +5,7 @@ import type { OpsSnapshot } from '../../../src/features/operations/types.js';
 const generateTextMock = vi.fn();
 const getSnapshotMock = vi.fn();
 
-vi.mock('../../../src/lib/gemini.js', () => ({ generateText: generateTextMock }));
+vi.mock('../../../src/lib/ai.js', () => ({ generateText: generateTextMock }));
 vi.mock('../../../src/features/operations/service.js', () => ({ getSnapshot: getSnapshotMock }));
 
 const { buildBriefingPrompt, clearBriefingCache, generateBriefing } =

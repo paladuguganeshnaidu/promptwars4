@@ -22,7 +22,7 @@ export class AppError extends Error {
     return new AppError(404, 'NOT_FOUND', message);
   }
 
-  /** 502 — a downstream dependency (Gemini, Firestore) failed. */
+  /** 502 — a downstream dependency (AI service, Firestore) failed. */
   static upstreamFailure(dependency: string, message: string): AppError {
     return new AppError(502, `${dependency.toUpperCase()}_UNAVAILABLE`, message);
   }

@@ -8,9 +8,13 @@ import { assistantLimiter } from '../src/middleware/rate-limit.js';
 const generateContentMock = vi.fn();
 const fakeDb = new FakeFirestore();
 
-vi.mock('@google/genai', () => ({
-  GoogleGenAI: class {
-    models = { generateContent: generateContentMock };
+vi.mock('openai', () => ({
+  default: class {
+    chat = {
+      completions: {
+        create: generateContentMock,
+      },
+    };
   },
 }));
 
@@ -137,7 +141,15 @@ describe('GET /api/stadium/facilities', () => {
 
 describe('POST /api/assistant/ask', () => {
   it('returns a grounded answer for a valid question', async () => {
-    generateContentMock.mockResolvedValue({ text: 'Gate 6 offers step-free access.' });
+    generateContentMock.mockResolvedValue({
+      choices: [
+        {
+          message: {
+            content: 'Gate 6 offers step-free access.',
+          },
+        },
+      ],
+    });
     const res = await request(app)
       .post('/api/assistant/ask')
       .send({ question: 'Where is the accessible entrance?', language: 'en' });
@@ -177,7 +189,15 @@ describe('operations endpoints', () => {
   });
 
   it('POST /api/operations/briefing generates an AI briefing', async () => {
-    generateContentMock.mockResolvedValue({ text: 'TOP RISKS\n- South Concourse busy' });
+    generateContentMock.mockResolvedValue({
+      choices: [
+        {
+          message: {
+            content: 'TOP RISKS\n- South Concourse busy',
+          },
+        },
+      ],
+    });
     const res = await request(app).post('/api/operations/briefing');
     expect(res.status).toBe(200);
     expect(res.body.briefing).toContain('TOP RISKS');

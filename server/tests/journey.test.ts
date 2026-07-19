@@ -10,9 +10,13 @@ import { FakeFirestore } from './helpers/fake-firestore.js';
 const generateContentMock = vi.fn();
 const fakeDb = new FakeFirestore();
 
-vi.mock('@google/genai', () => ({
-  GoogleGenAI: class {
-    models = { generateContent: generateContentMock };
+vi.mock('openai', () => ({
+  default: class {
+    chat = {
+      completions: {
+        create: generateContentMock,
+      },
+    };
   },
 }));
 
@@ -61,7 +65,15 @@ describe('matchday journey: fan arrival to operations briefing', () => {
   });
 
   it('answers a grounded accessibility question in the fan language', async () => {
-    generateContentMock.mockResolvedValueOnce({ text: 'La Puerta 6 tiene acceso sin escalones.' });
+    generateContentMock.mockResolvedValueOnce({
+      choices: [
+        {
+          message: {
+            content: 'La Puerta 6 tiene acceso sin escalones.',
+          },
+        },
+      ],
+    });
     const res = await request(app)
       .post('/api/assistant/ask')
       .send({ question: '¿Dónde está la entrada accesible del estadio?', language: 'es' });
@@ -76,7 +88,15 @@ describe('matchday journey: fan arrival to operations briefing', () => {
     expect(snapshot.body.zones.length).toBeGreaterThan(0);
     expect(snapshot.body.sustainability.wasteDivertedPct).toBeGreaterThan(0);
 
-    generateContentMock.mockResolvedValueOnce({ text: 'TOP RISKS\n- Monitor South Concourse' });
+    generateContentMock.mockResolvedValueOnce({
+      choices: [
+        {
+          message: {
+            content: 'TOP RISKS\n- Monitor South Concourse',
+          },
+        },
+      ],
+    });
     const briefing = await request(app).post('/api/operations/briefing');
     expect(briefing.status).toBe(200);
     expect(briefing.body.briefing).toContain('TOP RISKS');

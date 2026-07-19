@@ -1,6 +1,6 @@
 // Assistant feature logic: grounded, cached, multilingual answers.
 import { ASSISTANT_CACHE_TTL_MS, CACHE_MAX_ENTRIES } from '../../config/constants.js';
-import { generateText } from '../../lib/gemini.js';
+import { generateText } from '../../lib/ai.js';
 import { TtlCache } from '../../lib/ttl-cache.js';
 import { buildGroundingContext } from '../stadium/service.js';
 import { buildAssistantPrompt } from './prompts.js';

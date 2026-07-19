@@ -19,18 +19,11 @@ export const BRIEFING_CACHE_TTL_MS = 60_000;
 /** Upper bound on cached entries before the oldest is evicted. */
 export const CACHE_MAX_ENTRIES = 500;
 
-/** Hard timeout for a single Gemini call. */
-export const GEMINI_TIMEOUT_MS = 30_000;
+/** Hard timeout for a single AI provider call. */
+export const AI_TIMEOUT_MS = 30_000;
 
-/** Output budget for Gemini responses (answers and briefings are short). */
-export const GEMINI_MAX_OUTPUT_TOKENS = 1024;
-
-/**
- * Thinking-token budget. Zero disables Gemini 2.5's internal reasoning, which
- * these well-structured prompts do not need — it removes latency and prevents
- * thinking from consuming the whole output budget and returning empty text.
- */
-export const GEMINI_THINKING_BUDGET = 0;
+/** Maximum output tokens for assistant responses and briefings. */
+export const AI_MAX_OUTPUT_TOKENS = 1024;
 
 /** Interval between simulated crowd-telemetry updates written to Firestore. */
 export const TELEMETRY_TICK_MS = 60_000;

@@ -13,9 +13,10 @@ const booleanFlag = z
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   PORT: z.coerce.number().int().positive().default(DEFAULT_PORT),
-  GEMINI_API_KEY: z.string().min(1, 'GEMINI_API_KEY is required'),
+  OPENROUTER_API_KEY: z.string().min(1, 'OPENROUTER_API_KEY is required'),
+  OPENROUTER_MODEL: z.string().min(1).default('openrouter/free'),
+  APP_URL: z.string().url().default('http://localhost:5173'),
   REDIS_URL: z.string().min(1).optional(),
-  GEMINI_MODEL: z.string().min(1).default('gemini-2.0-flash'),
   GOOGLE_CLOUD_PROJECT: z.string().min(1).optional(),
   ALLOWED_ORIGINS: z.string().default(''),
   LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info'),

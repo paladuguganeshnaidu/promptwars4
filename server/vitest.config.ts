@@ -5,7 +5,9 @@ export default defineConfig({
     environment: 'node',
     env: {
       NODE_ENV: 'test',
-      GEMINI_API_KEY: 'test-key',
+      OPENROUTER_API_KEY: 'test-key',
+      OPENROUTER_MODEL: 'openrouter/free',
+      APP_URL: 'http://localhost:5173',
       LOG_LEVEL: 'error',
       TELEMETRY_SIM_ENABLED: 'false',
     },

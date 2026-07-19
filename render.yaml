@@ -38,7 +38,11 @@ envVarGroups:
 
   - name: credentials
     envVars:
-      - key: GEMINI_API_KEY
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: OPENROUTER_MODEL
+        sync: false
+      - key: APP_URL
         sync: false
       - key: GOOGLE_APPLICATION_CREDENTIALS_JSON
         sync: false
