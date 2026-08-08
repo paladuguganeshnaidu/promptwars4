@@ -40,5 +40,10 @@ export function errorHandler(
     'Request failed',
   );
 
-  res.status(appError.statusCode).json({ success: false, error: INTERNAL_ERROR_MESSAGE });
+  const responseBody =
+    error instanceof AppError
+      ? { success: false, error: appError.message }
+      : { success: false, error: INTERNAL_ERROR_MESSAGE };
+
+  res.status(appError.statusCode).json(responseBody);
 }

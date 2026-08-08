@@ -10,7 +10,7 @@ let client: OpenAI | undefined;
 function getClient(): OpenAI {
   client ??= new OpenAI({
     apiKey: env.OPENROUTER_API_KEY,
-    baseURL: 'https://openrouter.ai/api/v1',
+    baseURL: 'https://api.openrouter.ai/v1',
     defaultHeaders: {
       'HTTP-Referer': env.APP_URL,
       'X-Title': 'ArenaIQ',
@@ -42,6 +42,15 @@ async function requestText(prompt: string): Promise<string | undefined> {
   return choice?.message.content ?? undefined;
 }
 
+function extractProviderErrorMessage(error: unknown): string {
+  const message = error instanceof Error && error.message ? error.message : '';
+  const isSensitive = /quota|credit|credits|monthly|limit|exhausted/i.test(message);
+  if (isSensitive) {
+    return 'The AI service is temporarily unavailable. Please try again later.';
+  }
+  return message || 'The AI service is temporarily unavailable.';
+}
+
 /**
  * Generates plain text from the AI provider for the given prompt.
  *
@@ -62,8 +71,9 @@ export async function generateText(prompt: string): Promise<string> {
     try {
       text = await requestText(prompt);
     } catch (secondError) {
+      const message = extractProviderErrorMessage(secondError);
       logger.error({ err: secondError }, 'AI service call failed after retry');
-      throw AppError.upstreamFailure('ai', 'The AI service is temporarily unavailable.');
+      throw AppError.upstreamFailure('ai', message);
     }
   }
 

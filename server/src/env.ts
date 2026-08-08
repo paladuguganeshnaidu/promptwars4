@@ -14,7 +14,7 @@ const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   PORT: z.coerce.number().int().positive().default(DEFAULT_PORT),
   OPENROUTER_API_KEY: z.string().min(1, 'OPENROUTER_API_KEY is required'),
-  OPENROUTER_MODEL: z.string().min(1).default('openrouter/free'),
+  OPENROUTER_MODEL: z.string().min(1).default('openai/gpt-oss-120b:free'),
   APP_URL: z.string().url().default('http://localhost:5173'),
   REDIS_URL: z.string().min(1).optional(),
   GOOGLE_CLOUD_PROJECT: z.string().min(1).optional(),

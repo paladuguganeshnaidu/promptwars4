@@ -55,7 +55,7 @@ describe('askAssistant', () => {
   });
 
   it('propagates upstream failures unchanged for the error middleware', async () => {
-    generateTextMock.mockRejectedValue(AppError.upstreamFailure('gemini', 'down'));
+    generateTextMock.mockRejectedValue(AppError.upstreamFailure('ai', 'down'));
     await expect(askAssistant({ question: 'hello', language: 'en' })).rejects.toBeInstanceOf(
       AppError,
     );

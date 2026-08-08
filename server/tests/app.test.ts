@@ -99,7 +99,7 @@ describe('hardened HTTP headers', () => {
       .set('Content-Type', 'application/x-www-form-urlencoded')
       .send('a=1');
     expect(res.status).toBe(415);
-    expect(res.body).toEqual({ success: false, error: 'Internal Server Error' });
+    expect(res.body).toEqual({ success: false, error: 'POST bodies must be application/json.' });
   });
 });
 
@@ -135,7 +135,11 @@ describe('GET /api/stadium/facilities', () => {
   it('rejects an unknown category with 400', async () => {
     const res = await request(app).get('/api/stadium/facilities?category=bogus');
     expect(res.status).toBe(400);
-    expect(res.body).toEqual({ success: false, error: 'Internal Server Error' });
+    expect(res.body).toEqual({
+      success: false,
+      error:
+        "category: Invalid enum value. Expected 'food' | 'medical' | 'accessibility' | 'family' | 'prayer' | 'sustainability' | 'services', received 'bogus'",
+    });
   });
 });
 
@@ -170,7 +174,7 @@ describe('POST /api/assistant/ask', () => {
     expect(res.status).toBe(400);
   });
 
-  it('maps a Gemini outage to a sanitized 502', async () => {
+  it('maps an AI outage to a sanitized 502', async () => {
     generateContentMock.mockRejectedValue(new Error('secret internal quota trace'));
     const res = await request(app)
       .post('/api/assistant/ask')
@@ -208,6 +212,6 @@ describe('unknown routes', () => {
   it('returns a 404 with a stable error shape', async () => {
     const res = await request(app).get('/api/does-not-exist');
     expect(res.status).toBe(404);
-    expect(res.body).toEqual({ success: false, error: 'Internal Server Error' });
+    expect(res.body).toEqual({ success: false, error: 'No matching route.' });
   });
 });

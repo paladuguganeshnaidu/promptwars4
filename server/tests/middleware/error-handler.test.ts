@@ -22,11 +22,11 @@ const req = { method: 'GET', path: '/test' } as Request;
 const next = vi.fn() as unknown as NextFunction;
 
 describe('errorHandler', () => {
-  it('returns the sanitized envelope for an AppError', () => {
+  it('returns the AppError message for AppError instances', () => {
     const res = makeRes();
     errorHandler(AppError.badRequest('question: Required'), req, res, next);
     expect(res.statusCode).toBe(400);
-    expect(res.body).toEqual({ success: false, error: 'Internal Server Error' });
+    expect(res.body).toEqual({ success: false, error: 'question: Required' });
   });
 
   it('wraps an unexpected Error as 500 and hides its message from the client', () => {
