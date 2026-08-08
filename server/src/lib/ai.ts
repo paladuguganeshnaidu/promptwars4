@@ -10,7 +10,7 @@ let client: OpenAI | undefined;
 function getClient(): OpenAI {
   client ??= new OpenAI({
     apiKey: env.OPENROUTER_API_KEY,
-    baseURL: 'https://api.openrouter.ai/v1',
+    baseURL: 'https://openrouter.ai/api/v1',
     defaultHeaders: {
       'HTTP-Referer': env.APP_URL,
       'X-Title': 'ArenaIQ',
