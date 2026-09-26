@@ -1,99 +1,72 @@
-# FIFA 2026 Stadium App (ArenaIQ)
+# ArenaIQ — AI Stadium Assistant & Operations Dashboard
 
-[Live Demo](https://fifa-2026-stadium-app.onrender.com) · [Repository](https://github.com/paladuguganeshnaidu/promptwars4)
+Live demo: https://fifa-2026-stadium-app.onrender.com
+Repository: https://github.com/paladuguganeshnaidu/promptwars4
 
-ArenaIQ is a bilingual/multilingual fan assistant and operations dashboard designed specifically for stadium staff during the FIFA 2026 World Cup. It streamlines stadium operations, helps manage incidents, and provides real-time assistance to fans in multiple languages using GenAI (Gemini).
+ArenaIQ is a full-stack demonstration application for a large-event/stadium scenario. It combines a multilingual fan assistant with a staff-facing operations workspace.
 
-## What is the use of this project?
+> Project framing: working prototype/demo. It is not an official FIFA system, venue-control system, crowd-safety platform or production stadium deployment.
 
-This application serves two main purposes:
+## What it demonstrates
 
-1. **Fan Assistance**: A GenAI-powered assistant (using Gemini) that helps fans with their queries, navigation, and general information in their native languages.
-2. **Operations Dashboard**: A central hub for stadium staff to view real-time data, manage incidents, monitor crowd density, and oversee overall stadium operations during the event.
+### Fan assistant
 
-## Tech Stack
+A Gemini-powered conversational assistant for fan questions and multilingual interaction.
 
-The project is structured as a monorepo containing both the frontend client and the backend server:
+### Operations workspace
 
-- **Frontend (`client/`)**: React, TypeScript, Vite, Ant Design, Vitest.
-- **Backend (`server/`)**: Node.js, Express, TypeScript, Firestore, Google Gemini SDK.
+Application-level workflows for incident management, crowd-density views and staff-facing operational information.
 
-## Live Link
+The displayed operational data is application/demo data, not verified physical stadium telemetry.
 
-Check out the live application here: **[https://fifa-2026-stadium-app.onrender.com](https://fifa-2026-stadium-app.onrender.com)**
+## Architecture
 
-## Quickstart (Local Development)
+React + TypeScript + Vite → Node.js + Express + TypeScript → Firestore + Gemini.
 
-### Prerequisites
+## Technology
 
-- Node.js >= 18 (Client and Server run optimally on Node 22+)
-- npm
-- Google Cloud credentials (Firestore) and a Gemini API key for AI features.
+- Frontend: React, TypeScript, Vite, Ant Design.
+- Backend: Node.js, Express, TypeScript.
+- Database: Firestore.
+- AI: Google Gemini SDK.
+- Testing: Vitest.
+- Quality tooling: ESLint, Prettier, Husky.
+- Demo deployment: Render.
 
-### Installation & Setup
+## Local development
 
-1. **Install dependencies**:
+Prerequisites are Node.js 18+, npm, Firebase/Firestore configuration and Gemini credentials for AI features.
 
-   ```bash
-   npm install
-   ```
+Install dependencies, copy .env.example to .env, configure the required values, then run the server and client workspace development commands documented by the repository.
 
-2. **Environment Variables**:
-   Copy the `.env.example` file to `.env` and fill in your values (like the Gemini API key, Firestore project ID, and ports).
+## Build and quality checks
 
-   ```bash
-   cp .env.example .env
-   ```
+- npm run build
+- npm test
+- npm run lint
+- npm run type-check
 
-3. **Run the Development Servers**:
-   Start both the backend and frontend in separate terminals:
+## Project structure
 
-   ```bash
-   # Start the backend server (typically runs on port 8080)
-   npm run dev -w @arenaiq/server
+- client/src/features/assistant — fan assistant UI.
+- client/src/features/operations — operations dashboard UI.
+- client/src/lib/api.ts — client API wrapper.
+- server/src/features/assistant — assistant routes/services.
+- server/src/lib/gemini.ts — Gemini integration.
+- server/src/lib/firestore.ts — database helpers.
+- server/src/index.ts — server bootstrap.
 
-   # Start the frontend client (typically runs on port 5173)
-   npm run dev -w @arenaiq/client
-   ```
+## Current limitations
 
-## Build for Production
-
-To build both the client and server for production, run this from the repository root:
-
-```bash
-npm run build
-```
-
-## Testing & Quality
-
-- **Run all unit tests**:
-  ```bash
-  npm test
-  ```
-- Both client and server use `vitest` for testing. Server tests include integration-style checks with mocked Firestore/Gemini.
-- Linting and formatting are enforced via `eslint`, `prettier`, and `husky` pre-commit hooks.
-
-## Key Scripts
-
-- `npm run build` — Build both client and server packages.
-- `npm run start` — Start the backend server.
-- `npm run test` — Run tests across both workspaces.
-- `npm run type-check` — Run TypeScript type checking.
-
-## Codebase Overview
-
-- **Client (`client/`)**:
-  - `src/App.tsx` — Top-level routing.
-  - `src/features/assistant/` — Fan assistant UI components.
-  - `src/features/operations/` — Operations dashboard components (incidents, density board).
-  - `src/lib/api.ts` — Typed fetch wrapper for communicating with the server.
-
-- **Server (`server/`)**:
-  - `src/index.ts` — Application bootstrap and express setup.
-  - `src/features/assistant/` — Assistant routes and Gemini service integration.
-  - `src/lib/gemini.ts` — Gemini SDK integration and retry logic.
-  - `src/lib/firestore.ts` — Database helpers.
+- Demo data is not equivalent to live stadium telemetry.
+- Crowd monitoring is an application visualization rather than a verified physical sensing system.
+- No real-world crowd-safety performance claim is made.
+- Provider/API behavior can change independently of the repository.
 
 ## License
 
-This project is licensed under the MIT License. See the `LICENSE` file for details.
+MIT License. See LICENSE.
+
+## Author
+
+Paladugu Ganesh Naidu
